@@ -17,24 +17,24 @@ let connection = mysql.createConnection({
   database: 'Emp'
 });
 
-app.use(function check(err, req, res, next) {
-  connection.connect(function(error) {
-    if (error) {
-      res.writeHead(500, {
-        'content-Type': 'text/plain'
-      });
-      res.end('500 Server Error, Something went wrong with the connection');
-      console.log('Unexpected Connection problem ');
-      connection.end();
-    } else {
-      console.log('Error in the query');
-      res.writeHead(400, {
-        'content-Type': 'text/plain'
-      });
-      res.end('400 Bad Request, Please check your query again');
-      connection.end();
-    }
-  });
+app.use(function check(error, req, res, next) {
+    connection.connect(function(error) {
+      if (error) {
+        res.writeHead(500, {
+          'content-Type': 'text/plain'
+        });
+        res.end('500 Server Error, Something went wrong with the connection');
+        console.log('Unexpected Connection problem ');
+        connection.end();
+      } else {
+        console.log('Error in the query');
+        res.writeHead(400, {
+          'content-Type': 'text/plain'
+        });
+        res.end('400 Bad Request, Please check your query again');
+        connection.end();
+      }
+    });
   next();
 });
 
@@ -57,9 +57,9 @@ app.get('/', function(req, res) {
 
 app.get('/getall', function(req, res, next) {
   console.log('request was made: ' + req.url);
-  connection.query("SELECT * FROM EmployeeDB ", function(error, rows) {
+  connection.query("SELECT * FROM EmployeeDB " , function(error, rows) {
     if (error) {
-      next(error);
+      next (error);
       return;
     } else {
       res.writeHead(200, {
@@ -73,10 +73,11 @@ app.get('/getall', function(req, res, next) {
 });
 
 app.get('/get', function(req, res, next) {
+  console.log('request was made: ' + req.url);
   let id = req.query.id
-  connection.query("SELECT * FROM EmployeeDB WHERE EmpID = ?", [id], function(error, rows, fields) {
+  connection.query("SELECT * FROM EmployeeDB WHERE EmpID = ?", [id] , function(error, rows, fields) {
     if (error) {
-      next(error);
+      next (error);
       return;
     } else {
       res.writeHead(200, {
@@ -90,16 +91,13 @@ app.get('/get', function(req, res, next) {
 });
 
 
-app.get('/post', function(req, res) {
+app.get('/post', function(req, res, next) {
 
-  var values = {
-    Name: req.body.name,
-    EmpCode: req.body.code
-  }
+  var values = { Name: req.query.name, EmpCode: req.query.code};
 
-  connection.query("INSERT INTO `EmployeeDB` SET =?", [values], function(error, rows, fields) {
+  connection.query("INSERT INTO `EmployeeDB` SET ?", [values], function(error, rows, fields) {
     if (error) {
-      next(error);
+      next (error);
       return;
     } else {
       res.writeHead(200, {
@@ -114,11 +112,11 @@ app.get('/post', function(req, res) {
 });
 
 
-app.get('/delete', function(req, res) {
+app.get('/delete', function(req, res, next){
   let id = req.query.id
-  connection.query("DELETE FROM EmployeeDB WHERE EmpID = ?", [id], function(error, rows, fields) {
+  connection.query("DELETE FROM EmployeeDB WHERE EmpID = ?",[id], function(error, rows,  fields) {
     if (error) {
-      next(error);
+      next (error);
       return;
     } else {
       res.end(JSON.stringify(rows) + "\n" + 'Successfully Deleted');
@@ -127,14 +125,10 @@ app.get('/delete', function(req, res) {
 });
 
 app.get('/update', function(req, res, next) {
-
-  let values = {
-    Name: req.query.name,
-    EmpID: req.query.id
-  }
-  connection.query("UPDATE `EmployeeDB` SET `Name`= ? WHERE EmpID = ?", [values], function(error, rows) {
+  let values = [ req.query.name, req.query.code];
+  connection.query("UPDATE `EmployeeDB` SET  Name = ? WHERE EmpID = ?", [values] , function(error, rows) {
     if (error) {
-      next(error);
+      next (error);
       return;
     } else {
       res.writeHead(200, {
@@ -148,6 +142,6 @@ app.get('/update', function(req, res, next) {
 });
 
 
-app.listen(2000, (err) => {
-  console.log("Now listening to port 2000", err);
+app.listen(3000,(err)=>{
+  console.log("Now listening to port 3000",err);
 });
