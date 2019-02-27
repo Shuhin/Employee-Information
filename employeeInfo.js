@@ -59,7 +59,7 @@ app.get('/getall', function(req, res, next) {
   console.log('request was made: ' + req.url);
   connection.query("SELECT * FROM EmployeeDB ", function(error, rows) {
     if (error) {
-      next(err);
+      next(error);
       return;
     } else {
       res.writeHead(200, {
@@ -76,7 +76,6 @@ app.get('/get', function(req, res, next) {
   let id = req.query.id
   connection.query("SELECT * FROM EmployeeDB WHERE EmpID = ?", [id], function(error, rows, fields) {
     if (error) {
-      res.send("errr")
       next(error);
       return;
     } else {
@@ -93,11 +92,14 @@ app.get('/get', function(req, res, next) {
 
 app.get('/post', function(req, res) {
 
-  var values = [req.query.name, req.query.code]
+  var values = {
+    Name: req.body.name,
+    EmpCode: req.body.code
+  }
 
-  connection.query("INSERT INTO `EmployeeDB` ( `Name`, `EmpCode`) VALUES =?", [values], function(error, rows, fields) {
+  connection.query("INSERT INTO `EmployeeDB` SET =?", [values], function(error, rows, fields) {
     if (error) {
-      next(err);
+      next(error);
       return;
     } else {
       res.writeHead(200, {
@@ -116,7 +118,7 @@ app.get('/delete', function(req, res) {
   let id = req.query.id
   connection.query("DELETE FROM EmployeeDB WHERE EmpID = ?", [id], function(error, rows, fields) {
     if (error) {
-      next(err);
+      next(error);
       return;
     } else {
       res.end(JSON.stringify(rows) + "\n" + 'Successfully Deleted');
@@ -125,10 +127,13 @@ app.get('/delete', function(req, res) {
 });
 
 app.get('/update', function(req, res, next) {
-  let values = [req.query.id, req.query.name]
+
+  let values = {
+    Name: req.query.name,
+    EmpID: req.query.id
+  }
   connection.query("UPDATE `EmployeeDB` SET `Name`= ? WHERE EmpID = ?", [values], function(error, rows) {
     if (error) {
-      res.send("errr")
       next(error);
       return;
     } else {
@@ -143,6 +148,6 @@ app.get('/update', function(req, res, next) {
 });
 
 
-app.listen(3000, (err) => {
-  console.log("Now listening to port 4000", err);
+app.listen(2000, (err) => {
+  console.log("Now listening to port 2000", err);
 });
