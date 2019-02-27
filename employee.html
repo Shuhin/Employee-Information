@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+    <html>
+       <body>
+            <head>
+                  <style>
+
+                    body{
+                        background: #0d1521;
+                        font-family: tahoma;
+                        color: #989898;
+                    }
+
+                    button{
+                        padding: 15px;
+                        width: 20%;
+                        float: middle;
+                        background: #23282e;
+                        border: 0;
+                        box-sizing: border-box;
+                        color: #fff;
+                        cursor: pointer;
+                        font-size: 15px;
+                    }
+                  </style>
+            </head>
+
+                <h2>Create New Employee Account</h2>
+
+                <form action="/post">
+
+                        Name <input type="text" name="name" ><br/>
+                        EmpCode <input type ="number" name="code" ><br/>
+
+                        <br>
+                        <button class="button">Save</button>
+                </form>
+                <br/>
+
+            <h2> Get a Employee information</h2>
+
+            <form action="/get">
+                        Enter Employee Id <input type="number" name="id" placeholder="Search" /><br/>
+                        <br>
+                        <button class="button">Get</button>
+             </form>
+                <br/>
+
+            <h2>Delete a Employee</h2>
+
+            <form action="/delete">
+                    EmpID <input type="number" name="id" placeholder="Delete" /><br/>
+                    <br>
+                    <button class="button">Delete</button>
+
+             </form>
+
+                <br/>
+
+            <h2>Update a Employee</h2>
+
+             <form action="/update">
+                    Update Name <input type="text" name="name" placeholder="Enter Name"/><br/>
+                    Enter ID <input type="number" name="id" placeholder="Id" /><br/>
+                    <br>
+                <button class="button">Update</button>
+
+            </form>
+
+       </body>
+</html>
